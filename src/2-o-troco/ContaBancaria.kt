@@ -1,7 +1,7 @@
 import kotlin.system.exitProcess
 
 var saldo: Double = 100.5 // agora é double
-var nome: String = "fulano" // inicializando
+var nome: String = "fulano" // ini
 
 fun main() {
     nome = readString("Para começar digite seu nome: ")
