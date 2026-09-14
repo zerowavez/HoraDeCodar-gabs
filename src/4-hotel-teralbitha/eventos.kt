@@ -1,2 +1,3 @@
-package `4-hotel-teralbitha`
+fun main() {
 
+}

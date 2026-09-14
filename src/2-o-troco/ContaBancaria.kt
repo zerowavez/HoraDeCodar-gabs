@@ -7,10 +7,10 @@ fun main() {
     nome = readString("Para começar digite seu nome: ")
     println("Olá $nome é um prazer ter você por aqui!")
 
-    inicio()
+    inicioTroco()
 }
 
-fun inicio() {
+fun inicioTroco() {
     println("1 - Ver saldo")
     println("2 - Ver extrato")
     println("3 - Fazer depósito")
@@ -33,7 +33,7 @@ fun verSaldo() {
     autenticar()
 
     println("Seu saldo atual é: $saldo")
-    inicio()
+    inicioTroco()
 }
 
 fun fazerDeposito() {
@@ -95,7 +95,7 @@ fun autenticar() {
         println("Autenticado! continuando...")
     } else {
         println("Senha incorreta, voltando...")
-        inicio()
+        inicioTroco()
     }
 }
 
@@ -108,6 +108,6 @@ fun sair() {
     when (confirma) {
         true -> {println("$nome, foi um prazer ter você por aqui!")
             exitProcess(0)}//Hasta la vista, baby
-        false -> inicio() // Volta para o início
+        false -> inicioTroco() // Volta para o início
     }
 }

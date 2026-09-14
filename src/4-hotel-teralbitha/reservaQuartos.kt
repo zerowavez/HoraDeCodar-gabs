@@ -1,2 +1,4 @@
-package `4-hotel-teralbitha`
+fun reservaQuartos() {
+    val hospedeDias: Int = readInt("Por quantos dias irá se hospedar?", 1, 30)
 
+}
