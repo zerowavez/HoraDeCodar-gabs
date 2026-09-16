@@ -1,4 +1,4 @@
-data class reservaDataClass (
+data class reserva (
     var valorDiaria: Int,
     var quantidadeDias : Int,
     var nomeHospede: String,
@@ -6,13 +6,32 @@ data class reservaDataClass (
     var numQuarto: Int
 )
 
-data class resumoDataClass (
+data class resumo (
     var nomeHospede: String,
     var numQuarto: Int,
     var subtotal: Double,
     var taxaServico: Double,
     var total: Double
 )
+
+data class quarto (
+    var numeracao: Int,
+    var letreiro: String,
+) {
+    companion object {
+        var ocupado: Boolean = false
+    }
+}
+
+var quartos: MutableList<quarto> = mutableListOf<quarto>()
+
+fun checarOcupacao(quartoHospede: quarto): Boolean {
+    if (quarto.ocupado) {
+        return true
+    } else {
+        return false
+    }
+}
 
 fun criarReserva() {
     val validarQuartos: String = "SEL" // para verificação de tipo válido
@@ -49,12 +68,23 @@ fun criarReserva() {
         else -> 0.00 // hah, like that's ever gonna happen
     }
 
-    var entradaNumQuarto: Int = readInt("Escolha um quarto (1-20) ")
-//  if (numQuarto is ocupado) {
-//    bibibibobobob implementar solução aqui dps
-//  }
+    var entradaNumQuarto: Int = readInt("Escolha um quarto (1-20) ", 1, 20)
 
-    val reserva = reservaDataClass(
+    //arrumar sabomba aqui depois pra checar por atributo numeração em vez de número de índice, usar do-while
+//    if (quartos.isNotEmpty()) {
+//        if(checarOcupacao(quartos[entradaNumQuarto-1])) {
+//            while (true) {
+//                entradaNumQuarto = readInt("Esse quarto está ocupado! Por favor escolha algum outro (1-20) ", 1, 20)
+//                if (!checarOcupacao(quartos[entradaNumQuarto-1])) {
+//                    break
+//                } else {
+//                    continue
+//                }
+//            }
+//        }
+//    }
+
+    val reserva = reserva(
         valorDiaria = entradaDiaria,
         quantidadeDias = entradaDias,
         nomeHospede = entradaHospede,
@@ -68,7 +98,7 @@ fun criarReserva() {
     val taxaServicoEntradas: Double = subtotalEntradas / 10// vulgo 10%
     val totalEntradas: Double = subtotalEntradas + taxaServicoEntradas
 
-    val resumo = resumoDataClass(
+    val resumo = resumo(
         nomeHospede = entradaHospede,
         numQuarto = entradaNumQuarto,
         subtotal = subtotalEntradas,
@@ -89,8 +119,13 @@ fun criarReserva() {
 
     val confirma = readUserOption("$nomeUsuario, confirma a reserva?", "S", "N")
     if (confirma) {
+        quartos += quarto(entradaNumQuarto, "Ocupado")
+        quarto.ocupado = true
         println("Reserva confirmada com sucesso!")
-    } else (
+        println(quartos.joinToString(", "))
+        recepcao()
+    } else {
         println("Reserva cancelada...")
-    )
+        recepcao()
+    }
 }

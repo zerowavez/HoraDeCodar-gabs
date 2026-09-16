@@ -6,7 +6,7 @@ var nomeUsuario: String = "Pililiu"
 fun main() {
     // nomeUsuario = readString("Bem vindo ao Hotel $nomeHotel!, qual é seu nome? ", 1)
 
-    if (autenticarHospede(nomeUsuario, true)) {
+    if (autenticarUsuario(nomeUsuario, true)) {
         recepcao()
     }
 }
@@ -15,13 +15,21 @@ fun recepcao() {
     // função sendo testada:
     // criarReserva()
 
-    print("Bem vindo ao Hotel $nomeHotel!\n")
-    // A varival escolha armazena a opção escolhida pelo usuário.
-    // uma variavel local é utilizada apenas dentro da função recepcao().
-    val escolha = readInt("Escolha uma opção:", 1, 5)
+    println("==================== Hotel $nomeHotel ====================")
+    println("""
+        |1 - Reservar Um Quarto
+        |2 - Gerenciamento De Hospedes
+        |3 - Gerenciamento De Eventos
+        |4 - Abastecimento De Veículos
+        |5 - Manutenção Do Ar Condicionado
+        |6 - Relatórios
+        |7 - Check-out
+    """.trimMargin())
+
+    val escolha = readInt("Escolha uma opção:", 1, 7)
     when (escolha) {
         1 -> criarReserva()
-        2 -> CadastroHospedesDataClass()
+        2 -> cadastrarHospedes()
         3 -> print("eventos!")
         4 -> AbastecimentoDeAutomoveis()
         5 -> print("ar condicionado!")

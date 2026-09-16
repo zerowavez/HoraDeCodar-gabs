@@ -1,4 +1,4 @@
-fun autenticarHospede(nome: String, modoTeste: Boolean): Boolean {
+fun autenticarUsuario(nome: String, modoTeste: Boolean): Boolean {
     // pra agilizar testes do sistema
     if (modoTeste) {
         return true
@@ -9,11 +9,11 @@ fun autenticarHospede(nome: String, modoTeste: Boolean): Boolean {
     println("Agora, insira sua senha para se autenticar: ")
 
     for (i in 1..3) {
-        var senhaHospede = readInt("")
+        var senhaUsuario = readInt("")
 
         tentativa--
 
-        if (senhaHospede != 2678 && tentativa != 0) {
+        if (senhaUsuario != 2678 && tentativa != 0) {
             println("Senha incorreta, tente novamente [${tentativa} tentativa(s) restante(s)]")
         } else if (tentativa == 0) {
             println("Você excedeu seu número de tentativas! Volte mais tarde...")
