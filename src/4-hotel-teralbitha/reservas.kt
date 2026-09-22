@@ -1,131 +1,116 @@
-data class reserva (
-    var valorDiaria: Int,
-    var quantidadeDias : Int,
-    var nomeHospede: String,
-    var tipoQuarto: String,
-    var numQuarto: Int
-)
+import kotlin.String
 
-data class resumo (
-    var nomeHospede: String,
-    var numQuarto: Int,
-    var subtotal: Double,
-    var taxaServico: Double,
-    var total: Double
-)
-
-data class quarto (
-    var numeracao: Int,
-    var letreiro: String,
+data class Quarto (
+    val numero: Int,
+    var livre: Boolean = true
 ) {
-    companion object {
-        var ocupado: Boolean = false
-    }
+    val letreiro: String
+        get() = if (livre) "L" else "O"
 }
 
-var quartos: MutableList<quarto> = mutableListOf<quarto>()
+data class Reserva (
+    val hospede: String,
+    val quarto: Int,
+    val diarias: Int,
+    val valorDiaria: Double,
+    val tipoQuarto: String,
+    val fator: Double,
+    val subtotal: Double,
+    val taxaServico: Double,
+    val total: Double
+)
 
-fun checarOcupacao(quartoHospede: quarto): Boolean {
-    if (quarto.ocupado) {
-        return true
-    } else {
-        return false
-    }
-}
+data class TipoQuarto (
+    val tipo: String,
+    val fator: Double
+)
 
 fun criarReserva() {
-    val validarQuartos: String = "SEL" // para verificação de tipo válido
+    val quartos = (1..20).map { Quarto(it) }.toMutableList()
+    val reservas = mutableListOf<Reserva>()
 
-    //- entradas do usuário ------------------------------------------
+    val entradaHospede: String = readString("Qual é o nome do hospede? ")
 
-    val entradaDiaria: Int = readInt("Informe o valor da diária ", 1)
-    val entradaDias: Int = readInt("Informe a quantidade de diárias (1-30) ", 1, 30)
-    val entradaHospede: String = readString("Informe o nome do hóspede ", 1)
+    val entradaValorDiaria: Double = readDouble("Qual é o valor da diaria? ", 1.00)
 
-    var entradaQuarto: String = readString("Tipo de quarto (S/E/L) ",1, 1).uppercase()
-    if (!entradaQuarto.any { it in validarQuartos}) {
-        while (true) {
-            entradaQuarto = readString("Tipo inserido não existe, digite um tipo válido (S/E/L) ",1, 1).uppercase()
-            if (entradaQuarto.any { it in validarQuartos}) {
-                break
-            } else {
-                continue
-            }
-        }
-    } // p.s. odeio aninhar funções
+    val entradaQtdDias: Int = readInt("Quantas diarias? (1-30) ", 1)
 
-    val entradaTipoQuarto: String = when(entradaQuarto) {
+    val entradaTipoQuarto: TipoQuarto = lerTipoQuarto()
+
+    val entradaNumQuarto = lerNumeroQuarto(quartos)
+
+    val subtotal = entradaValorDiaria * entradaQtdDias * entradaTipoQuarto.fator
+    val taxaServico = subtotal * 0.10
+    val total = subtotal + taxaServico
+
+    println("==================== Resumo da Reserva ====================")
+    println("Nome do hospede: $entradaHospede")
+    println("Quarto: $entradaNumQuarto (${entradaTipoQuarto.tipo})")
+    println("Valor da diária: R\$ ${String.format("%.2f", entradaValorDiaria)}")
+    println("Subtotal: R\$ ${String.format("%.2f", subtotal)}")
+    println("Taxa de serviço (10%): R\$ ${String.format("%.2f", taxaServico)}")
+    println("Total: R\$ ${String.format("%.2f", total)}")
+
+    val confirmaReserva = readUserOption("$nomeUsuario, confirma a reserva?", "S", "N")
+    if (confirmaReserva) {
+        val quarto = quartos.find { it.numero == entradaNumQuarto }!!
+        quarto.livre = false
+        println("Reserva efetuada!")
+
+        val reserva = Reserva(
+            hospede = entradaHospede,
+            quarto = entradaNumQuarto,
+            diarias = entradaQtdDias,
+            valorDiaria = entradaValorDiaria,
+            tipoQuarto = entradaTipoQuarto.tipo,
+            fator = entradaTipoQuarto.fator,
+            subtotal = subtotal,
+            taxaServico = taxaServico,
+            total = total
+        )
+        reservas.add(reserva)
+
+        recepcao()
+    } else {
+        println("Reserva não efetuada...")
+
+        recepcao()
+    }
+}
+
+fun lerTipoQuarto(): TipoQuarto {
+    var entrada = readString("Qual é o tipo do quarto? (S/E/L) ", 1, 1).uppercase()
+    if (entrada !in "SEL") {
+        entrada = readString("Tipo inválido, deve ser (S/E/L) ")
+    }
+    val tipoEntrada = when(entrada) {
         "S" -> "Padrão"
         "E" -> "Executivo"
         "L" -> "Luxuoso"
-        else -> "???" // hah, like that's ever gonna happen
+        else -> "Padrão"
     }
 
-    val fator = when (entradaQuarto) {
+    val fatorEntrada = when (entrada) {
         "S" -> 1.00
         "E" -> 1.35
         "L" -> 1.65
-        else -> 0.00 // hah, like that's ever gonna happen
+        else -> 1.00
     }
 
-    var entradaNumQuarto: Int = readInt("Escolha um quarto (1-20) ", 1, 20)
+    val tipoRetorno = TipoQuarto(tipoEntrada, fatorEntrada)
+    return tipoRetorno
+}
 
-    //arrumar sabomba aqui depois pra checar por atributo numeração em vez de número de índice, usar do-while
-//    if (quartos.isNotEmpty()) {
-//        if(checarOcupacao(quartos[entradaNumQuarto-1])) {
-//            while (true) {
-//                entradaNumQuarto = readInt("Esse quarto está ocupado! Por favor escolha algum outro (1-20) ", 1, 20)
-//                if (!checarOcupacao(quartos[entradaNumQuarto-1])) {
-//                    break
-//                } else {
-//                    continue
-//                }
-//            }
-//        }
-//    }
-
-    val reserva = reserva(
-        valorDiaria = entradaDiaria,
-        quantidadeDias = entradaDias,
-        nomeHospede = entradaHospede,
-        tipoQuarto = entradaTipoQuarto,
-        numQuarto = entradaNumQuarto
-    )
-
-    //- processamento --------------------------------------------
-
-    val subtotalEntradas: Double = entradaDiaria * entradaDias * fator
-    val taxaServicoEntradas: Double = subtotalEntradas / 10// vulgo 10%
-    val totalEntradas: Double = subtotalEntradas + taxaServicoEntradas
-
-    val resumo = resumo(
-        nomeHospede = entradaHospede,
-        numQuarto = entradaNumQuarto,
-        subtotal = subtotalEntradas,
-        taxaServico = taxaServicoEntradas,
-        total = totalEntradas
-    )
-
-    //- confirmação -----------------------------------------------
-
-    println("""
-        Resumo:
-        Hóspede: ${resumo.nomeHospede}
-        Quarto: ${resumo.numQuarto} (${reserva.tipoQuarto})
-        Subtotal: ${resumo.subtotal}
-        Taxa de serviço (10%): ${resumo.taxaServico}
-        Total: ${resumo.total}
-    """.trimIndent())
-
-    val confirma = readUserOption("$nomeUsuario, confirma a reserva?", "S", "N")
-    if (confirma) {
-        quartos += quarto(entradaNumQuarto, "Ocupado")
-        quarto.ocupado = true
-        println("Reserva confirmada com sucesso!")
-        println(quartos.joinToString(", "))
-        recepcao()
-    } else {
-        println("Reserva cancelada...")
-        recepcao()
+fun lerNumeroQuarto(quartos: List<Quarto>): Int {
+    while (true) {
+        val numero = readInt("Selecione um quarto (1-20) ",1, 20)
+        val quarto = quartos.find {it.numero == numero}
+        print(quarto)
+        if (quarto?.letreiro == "L") {
+            continue
+        } else {
+            print("ocupado")
+        }
+        return numero
     }
 }
