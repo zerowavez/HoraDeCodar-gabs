@@ -1,73 +1,54 @@
-import kotlin.system.exitProcess
+data class Hospede (
+    val nome: String
+)
 
-fun cadastrarHospedes() {
-    val listaHospedes = mutableListOf(
-        "Carlos Villagran", "Maria Antonieta de las Nieves", "Roberto Gómez Bolaños", "Florinda Meza", "Ramón Valdés", "Rubén Aguirre", "Angelines Fernández", "Edgar Vivar", "Horácio Gómez Bolaños", "Raúl Padilla"
-    )
+private var hospedes = mutableListOf<Hospede>()
 
-    while (true) {
-        println("""Cadastro de Hóspedes
-            Selecione uma opção:
-            1. Cadastrar
-            2. Pesquisar
-            3. Sair""")
+fun submenuHospedes() {
+    println("""
+        ================== Submenu Hospedes ==================
+        1-Cadastrar
+        2-Pesquisar exato
+        3-Pesquisar prefixo
+        4-Listar
+        5-Atualizar
+        6-Remover
+        7-Voltar
+    """.trimIndent())
+    val opcao: Int = readInt("Selecione uma das opções acima: ", 1, 7)
 
-        val escolha = readln().toIntOrNull()
-
-        when (escolha) {
-            1 -> cadastrarHospede(listaHospedes)
-            2 -> pesquisarHospede(listaHospedes)
-            3 -> sairCadastroDeHospedes()
-            else -> erroCadastroDeHospedes()
-        }
+    when (opcao) {
+        1 -> cadastrarHospede()
+        2 -> pesquisarExato()
+        3 -> pesquisarPrefixo()
+        4 -> listarOrdenado()
+        5 -> atualizarCadastro()
+        6 -> removerCadastro()
+        7 -> recepcao()
+        else -> recepcao()
     }
 }
 
-fun cadastrarHospede(listaHospedes: MutableList<String>) {
-    println("Cadastro de Hóspedes.\nPor favor, informe o nome da Hóspede:")
-    val novoHospede = readln()
-    listaHospedes.add(novoHospede)
-
-    println("$novoHospede cadastrado com sucesso!")
-    println("Lista de Hóspedes atuais " + listaHospedes)
-
-    // Não é necessário chamar a função cadastrarHospedes(), pois o loop while já está chamando.
+fun cadastrarHospede() {
+    var nomeHospede: String = readString("Insira o nome do hospede: ", 1)
 }
 
-fun pesquisarHospede(listaHospedes: MutableList<String>) {
-    println("Pesquisa de Hóspedes.\nPor favor, informe o nome do Hóspede:")
-    val nomeHospede = readln()
+fun pesquisarExato() {
 
-    if (listaHospedes.any { it.contains(nomeHospede, ignoreCase = true) }) {
-        println("\nEncontramos a(s) hóspede(s):")
-        listaHospedes.filter { it.contains(nomeHospede, ignoreCase = true) }
-            .forEach { println(it) }
-    } else {
-        println("Não encontramos nenhuma hóspede com esse nome.")
-    }
 }
 
-fun sairCadastroDeHospedes() {
-    println("Você deseja sair? S/N")
-    val escolha = readln()
+fun pesquisarPrefixo() {
 
-    when (escolha.uppercase()) {
-        // uppercase fará o que for digitado ser convertido para maiúsculo por exemplpo x -> X
-        "S" -> {
-            println("Hasta la vista, Baby.")
-            exitProcess(0)
-        }
-        "N" -> {
-            println("Ok, voltando ao início.")
-            cadastrarHospedes()
-        }
-        else -> {
-            println("Desculpe, mas não compreendi.")
-            sairCadastroDeHospedes()
-        }
-    }
 }
 
-fun erroCadastroDeHospedes() {
-    println("Por favor, informe um número entre 1 e 3.")
+fun listarOrdenado() {
+
+}
+
+fun atualizarCadastro() {
+
+}
+
+fun removerCadastro() {
+
 }

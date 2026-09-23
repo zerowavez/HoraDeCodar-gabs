@@ -36,7 +36,7 @@ val reservas = mutableListOf<Reserva>()
 
 fun criarReserva() {
     // entradas simples
-    val entradaHospede: String = readString("Qual é o nome do hospede? ")
+    val entradaHospede: String = readString("Qual é o nome do hospede? ", 1)
 
     val entradaValorDiaria: Double = readDouble("Qual é o valor da diaria? ", 1.00)
 
@@ -90,7 +90,7 @@ fun criarReserva() {
 fun lerTipoQuarto(): TipoQuarto {
     var entrada = readString("Qual é o tipo do quarto? (S/E/L) ", 1, 1).uppercase()
     if (entrada !in "SEL") {
-        entrada = readString("Tipo inválido, deve ser (S/E/L) ")
+        entrada = readString("Tipo inválido, deve ser (S/E/L) ", 1, 1).uppercase()
     }
     val tipoEntrada = when(entrada) {
         "S" -> "Padrão"

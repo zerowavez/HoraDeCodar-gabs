@@ -1,5 +1,3 @@
-import kotlin.system.exitProcess
-
 val nomeHotel: String = "Usona"
 var nomeUsuario: String = "Pililiu"
 
@@ -29,7 +27,7 @@ fun recepcao() {
     val escolha = readInt("Escolha uma opção:", 1, 7)
     when (escolha) {
         1 -> criarReserva()
-        2 -> cadastrarHospedes()
+        2 -> submenuHospedes()
         3 -> print("eventos!")
         4 -> AbastecimentoDeAutomoveis()
         5 -> print("ar condicionado!")
