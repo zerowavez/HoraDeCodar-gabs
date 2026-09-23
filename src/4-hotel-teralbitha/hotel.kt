@@ -11,7 +11,7 @@ fun main() {
 
 fun recepcao() {
     // função sendo testada:
-    // criarReserva()
+    submenuHospedes()
 
     println("==================== Hotel $nomeHotel ====================")
     println("""

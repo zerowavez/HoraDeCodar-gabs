@@ -1,8 +1,8 @@
 data class Hospede (
-    val nome: String
+    var nome: String
 )
 
-private var hospedes = mutableListOf<Hospede>()
+var hospedes = mutableListOf<Hospede>()
 
 fun submenuHospedes() {
     println("""
@@ -30,19 +30,54 @@ fun submenuHospedes() {
 }
 
 fun cadastrarHospede() {
-    var nomeHospede: String = readString("Insira o nome do hospede: ", 1)
+    val nomeHospede: String = readString("Insira o nome do hospede: ", 1).replaceFirstChar { it.uppercase() }
+    if (hospedes.size > 15) {
+        println("O hotel está cheio, volte mais tarde!")
+    } else {
+        val hospedeNovo: Hospede = Hospede(nomeHospede)
+        hospedes.add(hospedeNovo)
+        println("Hospede adicionado com sucesso!")
+    }
+    submenuHospedes()
 }
 
 fun pesquisarExato() {
+    val consulta: String = readString("Escreva o exato nome pelo qual quer pesquisar: ", 1).replaceFirstChar { it.uppercase() }
+    val hospedeConsultado: Hospede? = hospedes.find { it.nome == consulta }
+    if (hospedeConsultado?.nome?.isNotEmpty() == true) {
+        println("Hospede $consulta está atualmente hospedado!")
 
+    } else {
+        println("Hospede $consulta parece não estar hospedado...")
+    }
+    submenuHospedes()
 }
 
 fun pesquisarPrefixo() {
-
+    val consulta: String = readString("Escreva o prefixo pelo qual quer pesquisar: ", 1).replaceFirstChar { it.uppercase() }
+    val hospedesEncontrados: List<Hospede> = hospedes.filter { it.nome.startsWith(consulta, ignoreCase = true) }
+    if (hospedesEncontrados.isNotEmpty()) {
+        val listaFormatada = hospedesEncontrados
+            .sortedBy { it.nome }
+            .mapIndexed { index, hospede ->
+                "${index + 1}. ${hospede.nome}"
+            }.joinToString(separator = "\n")
+        println("Hóspedes encontrados com o prefixo '$consulta':")
+        println(listaFormatada)
+    } else {
+        println("Nenhum hospede com o prefixo $consulta encontrado...")
+    }
+    submenuHospedes()
 }
 
 fun listarOrdenado() {
-
+    val listaOrdenada = hospedes
+        .sortedBy { it.nome }
+        .mapIndexed { index, hospede ->
+            "${index + 1}. ${hospede.nome}"
+        }.joinToString(separator = "\n")
+    println("Todos atualmente hospedados:")
+    println(listaOrdenada)
 }
 
 fun atualizarCadastro() {
