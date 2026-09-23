@@ -4,6 +4,7 @@ data class Quarto (
     val numero: Int,
     var livre: Boolean = true
 ) {
+    // função get permite passar um valor dinâmico dependendo de uma condicional
     val letreiro: String
         get() = if (livre) "L" else "O"
 }
@@ -20,25 +21,33 @@ data class Reserva (
     val total: Double
 )
 
+// poupa de ter que criar duas variáveis separadas para tipo e fator
 data class TipoQuarto (
     val tipo: String,
     val fator: Double
 )
 
-fun criarReserva() {
-    val quartos = (1..20).map { Quarto(it) }.toMutableList()
-    val reservas = mutableListOf<Reserva>()
+// map automaticamente cria 20 entradas numeradas automaticamente
+// deve ser global para que possa ser acessado nas demais funções desse programa
+val quartos = (1..20).map { Quarto(it) }.toMutableList()
 
+// deve ser global por conta do subprograma de relatórios
+val reservas = mutableListOf<Reserva>()
+
+fun criarReserva() {
+    // entradas simples
     val entradaHospede: String = readString("Qual é o nome do hospede? ")
 
     val entradaValorDiaria: Double = readDouble("Qual é o valor da diaria? ", 1.00)
 
     val entradaQtdDias: Int = readInt("Quantas diarias? (1-30) ", 1)
 
+    // entradas que já requerem sua própria função
     val entradaTipoQuarto: TipoQuarto = lerTipoQuarto()
 
     val entradaNumQuarto = lerNumeroQuarto(quartos)
 
+    // processamento
     val subtotal = entradaValorDiaria * entradaQtdDias * entradaTipoQuarto.fator
     val taxaServico = subtotal * 0.10
     val total = subtotal + taxaServico
@@ -54,7 +63,7 @@ fun criarReserva() {
     val confirmaReserva = readUserOption("$nomeUsuario, confirma a reserva?", "S", "N")
     if (confirmaReserva) {
         val quarto = quartos.find { it.numero == entradaNumQuarto }!!
-        quarto.livre = false
+        quarto.livre = false // preenche quarto
         println("Reserva efetuada!")
 
         val reserva = Reserva(
@@ -97,20 +106,45 @@ fun lerTipoQuarto(): TipoQuarto {
         else -> 1.00
     }
 
+    // monta nosso objeto tipo quarto e o retorna
     val tipoRetorno = TipoQuarto(tipoEntrada, fatorEntrada)
     return tipoRetorno
 }
 
+// precisa de lista de quartos como parâmetro para percorrer e identificar ocupação
 fun lerNumeroQuarto(quartos: List<Quarto>): Int {
     while (true) {
         val numero = readInt("Selecione um quarto (1-20) ",1, 20)
+        // precisamos encontrar o quarto específico para aplicar os checks
         val quarto = quartos.find {it.numero == numero}
-        print(quarto)
-        if (quarto?.letreiro == "L") {
+        // debug println("!!!!!!!!!!! $quarto !!!!!!!!!!!!!")
+        if (quarto != null && quarto.letreiro == "O") {
+            println("Quarto $numero está ocupado! Escolha um dos seguintes quartos livres: ")
+            listarQuartosLivres(quartos)
             continue
-        } else {
-            print("ocupado")
         }
+
         return numero
+    }
+}
+
+fun listarQuartosLivres(quartos: List<Quarto>) {
+    // caso não tiverem quartos livre
+    if (quartos.none { it.letreiro == "L" }) {
+        println("O hotel está cheio, volte novamente mais tarde...")
+        recepcao()
+    } else {
+        // chunked divide a lista em diferentes partes, no nosso caso, 4 listas de 5 quartos
+        val linhaQuartos = quartos.chunked(5)
+        // laço que vai imprimir as 4 listas
+        for (linha in linhaQuartos) {
+            // laço que vai imprimir as linhas
+            for (quarto in linha) {
+                // string.format torna 9 em 09, por exemplo, deixa uniforme
+                print("[${String.format("%02d", quarto.numero)}: ${quarto.letreiro}]")
+            }
+            // quebra de linha
+            println()
+        }
     }
 }
