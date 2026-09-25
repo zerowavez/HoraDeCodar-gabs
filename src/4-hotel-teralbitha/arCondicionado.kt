@@ -23,10 +23,16 @@ fun manutencaoCondicionado() {
 
     val valorDeslocamento: Double = readDouble("Quanto a empresa cobra para se deslocar até o hotel? ", 1.00)
 
-    var total: Double = valorAparelho * qtdAparelhos + valorDeslocamento
+    val bruto = valorAparelho * qtdAparelhos
+    var total = bruto
+
     if (qtdAparelhos >= minimoDesconto) {
-        total -= desconto
+
+        val valorDoDesconto = bruto * (desconto / 100.0)
+        total -= valorDoDesconto
     }
+
+    total += valorDeslocamento
 
     val novaEmpresa = Empresa(
         nomeEmpresa = empresa,
@@ -49,9 +55,15 @@ fun manutencaoCondicionado() {
 
     val opcao = readUserOption("Deseja informar outra empresa, $nomeUsuario?", "S", "N")
     if (!opcao) {
+        val empresaMenorOrcamento: Empresa = empresas.minBy{ it.total }
+        val empresaMaiorOrcamento: Empresa = empresas.maxBy { it.total }
+
+        println("O menor orçamento foi o da empresa ${empresaMenorOrcamento.nomeEmpresa}, custando R$${String.format("%.2f", empresaMenorOrcamento.total)}")
+        println("O maior orçamento foi o da empresa ${empresaMaiorOrcamento.nomeEmpresa}, custando R$${String.format("%.2f", empresaMaiorOrcamento.total)}")
+
+        val diffPercentual = ((empresaMaiorOrcamento.total - empresaMenorOrcamento.total) / empresaMenorOrcamento.total) * 100
+        println("O maior é ${String.format("%.2f",diffPercentual)}% superior ao menor.")
+    } else {
         recepcao()
     }
-
-    println("O melhor orçamento foi o de empresa")
-
 }
