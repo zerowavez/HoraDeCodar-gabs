@@ -28,7 +28,7 @@ data class TipoQuarto (
 )
 
 // map automaticamente cria 20 entradas numeradas automaticamente
-// deve ser global para que possa ser acessado nas demais funções desse programa
+// deve ser global para poder ser acessado nas demais funções desse programa
 val quartos = (1..20).map { Quarto(it) }.toMutableList()
 
 // deve ser global por conta do subprograma de relatórios
@@ -42,7 +42,7 @@ fun criarReserva() {
 
     val entradaQtdDias: Int = readInt("Quantas diarias? (1-30) ", 1)
 
-    // entradas que já requerem sua própria função
+    // entradas que já requerem a sua própria função
     val entradaTipoQuarto: TipoQuarto = lerTipoQuarto()
 
     val entradaNumQuarto = lerNumeroQuarto(quartos)
@@ -106,7 +106,7 @@ fun lerTipoQuarto(): TipoQuarto {
         else -> 1.00
     }
 
-    // monta nosso objeto tipo quarto e o retorna
+    // monta o nosso objeto tipo quarto e o retorna
     val tipoRetorno = TipoQuarto(tipoEntrada, fatorEntrada)
     return tipoRetorno
 }

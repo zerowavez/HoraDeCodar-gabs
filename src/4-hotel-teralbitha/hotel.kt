@@ -11,7 +11,7 @@ fun main() {
 
 fun recepcao() {
     // função sendo testada:
-    submenuHospedes()
+    reservaEvento()
 
     println("==================== Hotel $nomeHotel ====================")
     println("""
@@ -28,7 +28,7 @@ fun recepcao() {
     when (escolha) {
         1 -> criarReserva()
         2 -> submenuHospedes()
-        3 -> print("eventos!")
+        3 -> reservaEvento()
         4 -> AbastecimentoDeAutomoveis()
         5 -> print("ar condicionado!")
         6 -> print("relatórios!")
