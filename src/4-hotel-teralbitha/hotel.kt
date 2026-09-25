@@ -11,7 +11,7 @@ fun main() {
 
 fun recepcao() {
     // função sendo testada:
-    reservaEvento()
+    manutencaoCondicionado()
 
     println("==================== Hotel $nomeHotel ====================")
     println("""
@@ -30,7 +30,7 @@ fun recepcao() {
         2 -> submenuHospedes()
         3 -> reservaEvento()
         4 -> AbastecimentoDeAutomoveis()
-        5 -> print("ar condicionado!")
+        5 -> manutencaoCondicionado()
         6 -> print("relatórios!")
         7 -> sairDoHotel()
         else -> erro()
