@@ -2,17 +2,14 @@ val nomeHotel: String = "Usona"
 var nomeUsuario: String = "Pililiu"
 
 fun main() {
-    // nomeUsuario = readString("Bem vindo ao Hotel $nomeHotel!, qual é seu nome? ", 1)
+    nomeUsuario = readString("Bem vindo ao Hotel $nomeHotel!, qual é seu nome? ", 1)
 
-    if (autenticarUsuario(nomeUsuario, true)) {
+    if (autenticarUsuario(nomeUsuario, false)) {
         recepcao()
     }
 }
 
 fun recepcao() {
-    // função sendo testada:
-    manutencaoCondicionado()
-
     println("==================== Hotel $nomeHotel ====================")
     println("""
         |1 - Reservar Um Quarto
@@ -29,16 +26,12 @@ fun recepcao() {
         1 -> criarReserva()
         2 -> submenuHospedes()
         3 -> reservaEvento()
-        4 -> AbastecimentoDeAutomoveis()
+        4 -> consultarPrecosGas()
         5 -> manutencaoCondicionado()
-        6 -> print("relatórios!")
+        6 -> exibirRelatorio()
         7 -> sairDoHotel()
         else -> erro()
     }
-}
-
-fun AbastecimentoDeAutomoveis() {
-    TODO()
 }
 
 fun erro(){
